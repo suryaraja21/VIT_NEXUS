@@ -1,95 +1,189 @@
 import 'package:flutter/material.dart';
-import 'tutor_bridge_page.dart'; // Import the globalQuestions list
+import 'tutor_bridge_page.dart';
+import 'study_group_finder_page.dart';
+import 'collaborative_project_management_page.dart';
+import 'study_buddy_page.dart';
+import 'settings_page.dart';
+import 'contact_page.dart'; // Import the contact page
+import 'about_us_page.dart'; // Import the about us page
 
-class QuestionCornerPage extends StatefulWidget {
-  const QuestionCornerPage({super.key});
-
-  @override
-  _QuestionCornerPageState createState() => _QuestionCornerPageState();
+void main() {
+  runApp(MyApp());
 }
 
-class _QuestionCornerPageState extends State<QuestionCornerPage> {
-  final TextEditingController _controller = TextEditingController();
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-  void _submitQuestion() {
-    if (_controller.text.isNotEmpty) {
-      setState(() {
-        // Add the typed question to the global list
-        globalQuestions.add(_controller.text);
-        _controller.clear(); // Clear the text field after submission
-      });
-    }
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'castellar',
+      ),
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+    );
   }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Question Corner'),
-        backgroundColor: Colors.deepPurple,
+        title: const Row(
+          children: <Widget>[
+            CircleAvatar(
+              radius: 20.0,
+              backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+            ),
+            SizedBox(width: 10),
+            Text('Username1'),
+          ],
+        ),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: (String value) {
+              if (value == 'Settings') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => SettingsPage(),
+                  ),
+                );
+              } else if (value == 'Contact') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => ContactPage(),
+                  ),
+                );
+              } else if (value == 'About Us') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => AboutUsPage(),
+                  ),
+                );
+              }
+              print('Selected: $value');
+            },
+            itemBuilder: (BuildContext context) {
+              return <String>{'Settings', 'Contact', 'About Us'}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+            icon: const Icon(Icons.more_vert),
+          ),
+        ],
       ),
       body: Column(
         children: <Widget>[
-          // Expanded ListView to display the list of questions like chat bubbles
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-              itemCount: globalQuestions.length,
-              reverse: true, // Display the most recent message at the bottom
-              itemBuilder: (BuildContext context, int index) {
-                final String message = globalQuestions[globalQuestions.length - 1 - index];
-                return Align(
-                  alignment: Alignment.centerRight, // All messages from the user
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5.0),
-                    padding: const EdgeInsets.all(12.0),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple[100], // Chat bubble color
-                      borderRadius: BorderRadius.circular(20.0),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(minWidth: 450),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => TutorBridgePage(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Tutor Bridge',
+                          style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
-                    child: Text(
-                      message,
-                      style: const TextStyle(color: Colors.black, fontSize: 16.0),
+                    const SizedBox(height: 25),
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(minWidth: 450),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => StudyGroupFinderPage(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Study Group Finder',
+                          style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
-                  ),
-                );
-              },
+                    const SizedBox(height: 25),
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(minWidth: 450),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => CollaborativeProjectManagementPage(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Collaborative Project Management',
+                          style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 25),
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(minWidth: 450),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => StudyBuddyPage(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Study Buddy',
+                          style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
-          // Input field and send button
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: <Widget>[
-                // Expanded Text Field to take up most of the row
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        borderSide: BorderSide.none,
-                      ),
-                      hintText: 'Type your question...',
-                    ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: GestureDetector(
+                onTap: () {
+                  print('Logout tapped');
+                },
+                child: const Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
                   ),
                 ),
-                const SizedBox(width: 8), // Space between the text field and the button
-                // Circular button to act as the "Send" bubble
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.deepPurple,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    onPressed: _submitQuestion,
-                    icon: const Icon(Icons.send, color: Colors.white),
-                    tooltip: 'Send',
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ],
